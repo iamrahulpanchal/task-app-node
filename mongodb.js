@@ -11,8 +11,14 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
     console.log(`Connected to DB`);
 
     const db = client.db(databaseName);
+
     db.collection('users').insertOne({
         name: 'Rahul Panchal',
         age: 24
+    }, (error, result) => {
+        if(error){
+            return console.log(`Unable to Insert`);
+        }
+        console.log(result.ops);
     });
 });
