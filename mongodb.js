@@ -1,8 +1,13 @@
 const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
+const ObjectID = mongodb.ObjectID;
 
 const connectionURL = 'mongodb://127.0.0.1:27017';
 const databaseName = 'task-manager';
+
+const id = new ObjectID();
+console.log(id);
+// console.log(id.getTimestamp());
 
 MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
     if(error){
@@ -11,6 +16,18 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
     console.log(`Connected to DB`);
 
     const db = client.db(databaseName);
+
+    db.collection('users').insertOne({
+        _id: id,
+        name: 'Vikram',
+        age: 25
+    }, (error, result) => {
+        if(error) {
+            return console.log(`Unable to Insert`);
+        }
+        console.log(result.ops);
+        console.log(result.insertedCount);
+    })
 
     // db.collection('users').insertMany([
     //     {
@@ -31,21 +48,21 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
     //     console.log(result.insertedCount);
     // });
 
-    db.collection('tasks').insertMany([{
-        description: 'Task 1',
-        completed: true
-    }, {
-        description: 'Task 2',
-        completed: false
-    }, {
-        description: 'Task 3',
-        completed: false
-    }], (error, result) => {
-        if(error) {
-            return console.log(`Unable to Insert`);
-        }
-        console.log(result.ops);
-        console.log(result.insertedCount);
-    });
+    // db.collection('tasks').insertMany([{
+    //     description: 'Task 1',
+    //     completed: true
+    // }, {
+    //     description: 'Task 2',
+    //     completed: false
+    // }, {
+    //     description: 'Task 3',
+    //     completed: false
+    // }], (error, result) => {
+    //     if(error) {
+    //         return console.log(`Unable to Insert`);
+    //     }
+    //     console.log(result.ops);
+    //     console.log(result.insertedCount);
+    // });
 
 });
