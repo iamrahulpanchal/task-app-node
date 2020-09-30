@@ -13,16 +13,10 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
 
     const db = client.db(databaseName);
 
-    const updateManyPromise = db.collection('tasks').updateMany({
-        completed: false
-    }, {
-        $set: {
-            completed: true
-        }
-    });
-
-    updateManyPromise.then((resp) => {
-        console.log(resp.modifiedCount);
+    db.collection('users').deleteOne({
+        "_id" : new ObjectID("5f744496a6400e1750463c1c")
+    }).then((resp) => {
+        console.log(resp.deletedCount);
     }).catch((err) => {
         console.log(err);
     });
