@@ -17,7 +17,10 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
         _id: new ObjectID("5f7435b23829371884207feb") 
     }, {
         $set: {
-            name: 'Rahul Panchal'
+            name: 'Rahul Panchal Update'
+        },
+        $inc: {
+            age: 5,
         }
     });
 
