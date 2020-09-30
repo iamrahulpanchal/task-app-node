@@ -13,18 +13,15 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
 
     const db = client.db(databaseName);
 
-    const updatePromise = db.collection('users').updateOne({ 
-        _id: new ObjectID("5f7435b23829371884207feb") 
+    const updateManyPromise = db.collection('tasks').updateMany({
+        completed: false
     }, {
         $set: {
-            name: 'Rahul Panchal Update'
-        },
-        $inc: {
-            age: 5,
+            completed: true
         }
     });
 
-    updatePromise.then((resp) => {
+    updateManyPromise.then((resp) => {
         console.log(resp.modifiedCount);
     }).catch((err) => {
         console.log(err);
