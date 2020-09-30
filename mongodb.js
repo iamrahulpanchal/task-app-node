@@ -31,4 +31,10 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
         console.log(users);
     });
 
+    db.collection('users').find({ age: 18 }).count((error, count) => {
+        if(error){
+            return console.log(`Unable to fetch users`);
+        }
+        console.log(count);
+    });
 });
