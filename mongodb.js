@@ -13,13 +13,22 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
 
     const db = client.db(databaseName);
 
-    db.collection('users').findOne({ _id: new ObjectID("5f7435b23829371884207feb") }, (error, user) => {
+    // db.collection('users').findOne({ _id: new ObjectID("5f7435b23829371884207feb") }, (error, user) => {
+    //     if(error){
+    //         return console.log(`Unable to fetch user`);
+    //     }
+    //     if(!user){
+    //         return console.log(`User Not Found`);
+    //     }
+    //     console.log(user);
+    // });
+
+    // Find returns cursor
+    db.collection('users').find({ age: 18 }).toArray((error, users) => {
         if(error){
-            return console.log(`Unable to fetch user`);
+            return console.log(`Unable to fetch users`);
         }
-        if(!user){
-            return console.log(`User Not Found`);
-        }
-        console.log(user);
+        console.log(users);
     });
+
 });
