@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -41,11 +42,12 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-// Before saving the pass to DB, it has to be encrypted
 userSchema.pre('save', async function(next){
     const user = this;
-    console.log(`Just Before`);
-    next(); // It depicts that this password hashing is completed.
+    if(user.isModified('password')){
+        user.password = await bcrypt.hash(user.password, 8);
+    }
+    next();
 });
 
 const Users = mongoose.model('Users', userSchema);
