@@ -48,37 +48,39 @@ const Users = mongoose.model('Users', {
     }
 });
 
-// Adding Data into Collection
-const me = new Users({
-    name: 'Testing Password',
-    age: 25,
-    email: 'rahul@gmail.com',
-    password: 'rahulpanchal'
-});
-
-// Saving Data into DB
-me.save().then((me) => {
-    console.log(me);
-}).catch((err) => {
-    console.log(err);
-});
-
-// const Tasks = mongoose.model('Tasks', {
-//     description: {
-//         type: String
-//     },
-//     completed: {
-//         type: Boolean
-//     }
+// // Adding Data into Collection
+// const me = new Users({
+//     name: 'Testing Password',
+//     age: 25,
+//     email: 'rahul@gmail.com',
+//     password: 'rahulpanchal'
 // });
 
-// const task = new Tasks({
-//     description: 'Simple Description',
-//     completed: false
-// });
-
-// task.save().then((task) => {
-//     console.log(task);
+// // Saving Data into DB
+// me.save().then((me) => {
+//     console.log(me);
 // }).catch((err) => {
 //     console.log(err);
 // });
+
+const Tasks = mongoose.model('Tasks', {
+    description: {
+        type: String,
+        trim: true,
+        required: true
+    },
+    completed: {
+        type: Boolean,
+        default: false
+    }
+});
+
+const task = new Tasks({
+    description: '          Description 111          ',
+});
+
+task.save().then((task) => {
+    console.log(task);
+}).catch((err) => {
+    console.log(err);
+});
