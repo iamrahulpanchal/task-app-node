@@ -34,14 +34,26 @@ const Users = mongoose.model('Users', {
                 throw new Error `Email ID is not Valid!`;
             }
         }
+    },
+    password: {
+        type: String,
+        required: true,
+        minlength: 7,
+        trim: true,
+        validate(value){
+            if(value.toLowerCase().includes('password')){
+                throw new Error (`Password should not contain Password`);
+            }
+        }
     }
 });
 
 // Adding Data into Collection
 const me = new Users({
-    name: 'Built In Options',
-    age: 21,
-    email: 'RAHUL@GMAIL.COM'
+    name: 'Testing Password',
+    age: 25,
+    email: 'rahul@gmail.com',
+    password: 'rahulpanchal'
 });
 
 // Saving Data into DB
