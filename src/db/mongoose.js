@@ -14,14 +14,19 @@ const Users = mongoose.model('Users', {
     },
     age: {
         type: Number,
-        required: true
+        required: true,
+        validate(value) {
+            if(value < 0){
+                throw new Error (`Age must be a Positive Number`);
+            }
+        }
     }
 });
 
 // Adding Data into Collection
 const me = new Users({
-    // name: 'Bhavin Panchal',
-    // age: 18
+    name: 'Bhavin Panchal',
+    age: -1
 });
 
 // Saving Data into DB
@@ -30,3 +35,23 @@ me.save().then((me) => {
 }).catch((err) => {
     console.log(`Unable to Save to DB ${err}`);
 });
+
+// const Tasks = mongoose.model('Tasks', {
+//     description: {
+//         type: String
+//     },
+//     completed: {
+//         type: Boolean
+//     }
+// });
+
+// const task = new Tasks({
+//     description: 'Simple Description',
+//     completed: false
+// });
+
+// task.save().then((task) => {
+//     console.log(task);
+// }).catch((err) => {
+//     console.log(err);
+// });
