@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api', { 
     useNewUrlParser: true, 
@@ -20,20 +21,30 @@ const Users = mongoose.model('Users', {
                 throw new Error (`Age must be a Positive Number`);
             }
         }
+    },
+    email: {
+        type: String,
+        required: true,
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new Error `Email ID is not Valid!`;
+            }
+        }
     }
 });
 
 // Adding Data into Collection
 const me = new Users({
-    name: 'Bhavin Panchal',
-    age: -1
+    name: 'Testing Email',
+    age: 45,
+    email: 'rahulgmail'
 });
 
 // Saving Data into DB
 me.save().then((me) => {
     console.log(me);
 }).catch((err) => {
-    console.log(`Unable to Save to DB ${err}`);
+    console.log(err);
 });
 
 // const Tasks = mongoose.model('Tasks', {
