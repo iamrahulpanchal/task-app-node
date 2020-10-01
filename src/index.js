@@ -27,6 +27,19 @@ app.get('/users', (req, res) => {
         });
 });
 
+app.get('/users/:id', (req, res) => {
+    const _id = req.params.id;
+    const findByIdPromise = Users.findById(_id);
+    findByIdPromise.then((user) => {
+        if (!user){
+            return res.status(404).send();
+        }
+        res.send(user);
+    }).catch((err) => {
+        res.status(500).send();
+    })
+});
+
 app.post('/tasks', (req, res) => {
     const task = new Tasks(req.body);
     task.save().then(() => {
