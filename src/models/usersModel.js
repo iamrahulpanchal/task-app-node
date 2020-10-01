@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-const Users = mongoose.model('Users', {
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -40,5 +40,14 @@ const Users = mongoose.model('Users', {
         }
     }
 });
+
+// Before saving the pass to DB, it has to be encrypted
+userSchema.pre('save', async function(next){
+    const user = this;
+    console.log(`Just Before`);
+    next(); // It depicts that this password hashing is completed.
+});
+
+const Users = mongoose.model('Users', userSchema);
 
 module.exports = Users;
