@@ -2,6 +2,7 @@ const express = require('express');
 require('./db/mongoose');   // For Connecting to DB
 const Users = require('./models/users');
 const Tasks = require('./models/tasks');
+const { find } = require('./models/users');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -15,6 +16,15 @@ app.post('/users', (req, res) => {
     }).catch((err) => {
         res.status(400).send(err);
     })
+});
+
+app.get('/users', (req, res) => {
+        const findPromise = Users.find({});
+        findPromise.then((users) => {
+            res.send(users);
+        }).catch((err) => {
+            res.status(500).send();
+        });
 });
 
 app.post('/tasks', (req, res) => {
