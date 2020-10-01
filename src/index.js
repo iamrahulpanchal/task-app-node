@@ -2,73 +2,75 @@ const express = require('express');
 require('./db/mongoose');   // For Connecting to DB
 const Users = require('./models/users');
 const Tasks = require('./models/tasks');
-const { find } = require('./models/users');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
     const user = new Users(req.body);
-    user.save().then(() => {
+    try {
+        // After Saving to DB, other code will run
+        await user.save();
         res.status(201).send(user);
-    }).catch((err) => {
-        res.status(400).send(err);
-    })
+    } catch (e) {
+        res.status(400).send(e);
+    }
 });
 
-app.get('/users', (req, res) => {
-        const findUsers = Users.find({});
-        findUsers.then((users) => {
-            res.send(users);
-        }).catch((err) => {
-            res.status(500).send();
-        });
+app.get('/users', async (req, res) => {
+    try {
+        const users = await Users.find({});
+        res.send(users);
+    } catch (e) {
+        res.status(500).send();
+    }
 });
 
-app.get('/users/:id', (req, res) => {
+app.get('/users/:id', async (req, res) => {
     const _id = req.params.id;
-    const findUserById = Users.findById(_id);
-    findUserById.then((user) => {
-        if (!user){
+    try {
+        const user = await Users.findById(_id);
+        if(!user) {
             return res.status(404).send();
         }
         res.send(user);
-    }).catch((err) => {
+    } catch (e) {
         res.status(500).send();
-    })
+    }
 });
 
-app.post('/tasks', (req, res) => {
+app.post('/tasks', async (req, res) => {
     const task = new Tasks(req.body);
-    task.save().then(() => {
+    try {
+        await task.save();
         res.status(201).send(task);
-    }).catch((err) => {
+    } catch (e) {
         res.status(400).send(err);
-    });
+    }
 });
 
-app.get('/tasks', (req, res) => {
-    const findTasks = Tasks.find({});
-    findTasks.then((tasks) => {
+app.get('/tasks', async (req, res) => {
+    try {
+        const tasks = await Tasks.find({});
         res.send(tasks);
-    }).catch((err) => {
+    } catch (e) {
         res.status(500).send();
-    });
+    }
 });
 
-app.get('/tasks/:id', (req, res) => {
+app.get('/tasks/:id', async (req, res) => {
     const _id = req.params.id;
-    const findTaskById = Tasks.findById(_id);
-    findTaskById.then((task) => {
-        if(!task) {
+    try {
+        const task = await Tasks.findById(_id);
+        if(!task){
             return res.status(404).send();
         }
         res.send(task);
-    }).catch((err) => {
+    } catch (e) {
         res.status(500).send();
-    })
+    }
 });
 
 app.listen(port, () =>{
