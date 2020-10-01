@@ -11,11 +11,13 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api', {
 const Users = mongoose.model('Users', {
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     age: {
         type: Number,
         required: true,
+        default: 0,
         validate(value) {
             if(value < 0){
                 throw new Error (`Age must be a Positive Number`);
@@ -25,6 +27,8 @@ const Users = mongoose.model('Users', {
     email: {
         type: String,
         required: true,
+        trim: true,
+        lowercase: true,
         validate(value){
             if(!validator.isEmail(value)){
                 throw new Error `Email ID is not Valid!`;
