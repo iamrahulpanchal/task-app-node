@@ -2,6 +2,7 @@ const express = require('express');
 require('./db/mongoose');   // For Connecting to DB
 const Users = require('./models/users');
 const Tasks = require('./models/tasks');
+const { findByIdAndUpdate } = require('./models/users');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -11,7 +12,6 @@ app.use(express.json());
 app.post('/users', async (req, res) => {
     const user = new Users(req.body);
     try {
-        // After Saving to DB, other code will run
         await user.save();
         res.status(201).send(user);
     } catch (e) {
@@ -38,6 +38,21 @@ app.get('/users/:id', async (req, res) => {
         res.send(user);
     } catch (e) {
         res.status(500).send();
+    }
+});
+
+app.patch('/users/:id', async (req, res) => {
+    try {
+        const user = await Users.findByIdAndUpdate(req.params.id, req.body, { 
+            new: true, 
+            runValidators: true 
+        });
+        if(!user){
+            return res.status(404).send();
+        }
+        res.send(user);
+    } catch (e) {
+        res.status(400).send(e);
     }
 });
 
