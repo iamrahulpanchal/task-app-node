@@ -1,5 +1,6 @@
 const express = require('express');
 const Tasks = require('../models/tasksModel');
+const Users = require('../models/usersModel');
 const router = new express.Router;
 
 router.post('/tasks', async (req, res) => {
@@ -50,10 +51,11 @@ router.patch('/tasks/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const body = req.body;
-        const task = await Tasks.findByIdAndUpdate(id, body, {
-            new: true,
-            runValidators: true
+        const task = await Tasks.findById(id);
+        updates.forEach((field) => {
+            task[field] = body[field];
         });
+        await task.save();
         if(!task){
             return res.status(404).send();
         }
