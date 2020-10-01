@@ -39,9 +39,9 @@ const Users = mongoose.model('Users', {
 
 // Adding Data into Collection
 const me = new Users({
-    name: 'Testing Email',
-    age: 45,
-    email: 'rahulgmail'
+    name: 'Built In Options',
+    age: 21,
+    email: 'RAHUL@GMAIL.COM'
 });
 
 // Saving Data into DB
