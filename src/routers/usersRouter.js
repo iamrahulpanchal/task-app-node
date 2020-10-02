@@ -44,6 +44,19 @@ router.post('/users/logout', auth, async (req, res) => {
     }
 });
 
+// Logout From All Devices
+router.post('/users/logoutAll', auth, async (req, res) => {
+    try {
+        req.user.tokens = [];
+        await req.user.save();
+        res.status(200).send({
+            success: "Logged Out of All Devices"
+        });
+    } catch (e) {
+        res.status(500).send();
+    }
+});
+
 router.get('/users/me', auth, async (req, res) => {
     const me = req.user;
     res.send(me);
