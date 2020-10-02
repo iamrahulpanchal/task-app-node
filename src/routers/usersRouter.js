@@ -62,7 +62,7 @@ router.get('/users/me', auth, async (req, res) => {
     res.send(me);
 });
 
-router.patch('/users/:id', async (req, res) => {
+router.patch('/users/me', auth, async (req, res) => {
     const updates = Object.keys(req.body);
     const allowedUpdates = ['name', 'email', 'password', 'age'];
     const isValidUpdate = updates.every((item) => {
@@ -76,15 +76,11 @@ router.patch('/users/:id', async (req, res) => {
     }
     
     try {
-        const user = await Users.findById(req.params.id);
         updates.forEach((field) => {
-            user[field] = req.body[field];
+            req.user[field] = req.body[field];
         });
-        await user.save();
-        if(!user){
-            return res.status(404).send();
-        }
-        res.send(user);
+        await req.user.save();
+        res.send(req.user);
     } catch (e) {
         res.status(400).send(e);
     }
@@ -92,12 +88,6 @@ router.patch('/users/:id', async (req, res) => {
 
 router.delete('/users/me', auth, async (req, res) =>{
     try {
-        // const user = await Users.findByIdAndDelete(req.user._id);
-        // if(!user){
-        //     return res.status(404).send({
-        //         error: "User Not Found!"
-        //     })
-        // }
         await req.user.remove();
         res.send(req.user);
     } catch (e) {
