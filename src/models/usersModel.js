@@ -42,6 +42,20 @@ const userSchema = new mongoose.Schema({
     }
 });
 
+userSchema.statics.findByCredentials = async (email, pass) => {
+    const user = await Users.findOne({
+        email: email
+    });
+    if(!user){
+        throw new Error (`User Not Registered`);
+    }
+    const isMatch = await bcrypt.compare(pass, user.password);
+    if(!isMatch){
+        throw new Error (`Password is Incorrect`);
+    }
+    return user;
+};
+
 userSchema.pre('save', async function(next){
     const user = this;
     if(user.isModified('password')){
