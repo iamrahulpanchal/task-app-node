@@ -41,7 +41,13 @@ const userSchema = new mongoose.Schema({
                 throw new Error (`Password should not contain Password`);
             }
         }
-    }
+    },
+    tokens: [{
+        token: {
+            type: String,
+            required: true
+        }
+    }]
 });
 
 // Instance Methods
@@ -50,6 +56,10 @@ userSchema.methods.generateAuthToken = async function() {
     const token = jwt.sign({
         _id: user._id.toString()
     }, 'GeneratingToken');
+    user.tokens = user.tokens.concat({
+        token: token
+    });
+    await user.save();
     return token;
 };
 
