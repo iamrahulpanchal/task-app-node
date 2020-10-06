@@ -97,7 +97,10 @@ router.delete('/users/me', auth, async (req, res) =>{
 });
 
 const upload = multer({
-    dest: 'avatars'
+    dest: 'avatars',
+    limits: {
+        fileSize: 1000000 // In Bytes i.e 1 MB
+    }
 })
 
 router.post('/users/me/avatar', upload.single('avatar'), async (req, res) => {
