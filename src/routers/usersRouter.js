@@ -124,4 +124,18 @@ router.delete('/users/me/avatar', auth, async (req, res) =>{
     res.send(`Image Deleted`);
 });
 
+// Test this in Browser using localhost:3000/
+router.get('/users/:id/avatar', async (req, res) => {
+    try {
+        const user = await Users.findById(req.params.id);
+        if(!user || !user.avatar){
+            throw new Error();
+        }
+        res.set('Content-Type', 'image/jpg');
+        res.send(user.avatar);
+    } catch (err) {
+        res.status(404).send();
+    }
+});
+
 module.exports = router;
