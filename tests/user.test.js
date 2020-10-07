@@ -93,3 +93,37 @@ test('Dont Delete User Profile Unauthenticated', async () => {
         .send()
         .expect(401)
 });
+
+test('Upload Avatar Image', async () => {
+    await request(app)
+        .post('/users/me/avatar')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .attach('avatar', 'tests/fixtures/profile-pic.jpg')
+        .expect(200)
+    
+    const user = await Users.findById(userOneId);
+    expect(user.avatar).toEqual(expect.any(Buffer))
+});
+
+test('Update Valid User Fields', async () => {
+    await request(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send({
+            name: 'Bhumi Panchal'
+        })
+        .expect(200)
+        
+    const user = await Users.findById(userOneId);
+    expect(user.name).toEqual('Bhumi Panchal');
+});
+
+test('Not Update Invalid User Fields', async () => {
+    await request(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send({
+            location: 'Bhayandar'
+        })
+        .expect(400)
+});
