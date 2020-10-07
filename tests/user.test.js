@@ -2,9 +2,18 @@ const request = require('supertest');
 const app = require('../src/app');
 const Users = require('../src/models/usersModel');
 
+// For Testing LOGIN Route, We need one record
+const userOne = {
+    name: 'Bhavin Panchal',
+    email: 'bhavin@gmail.com',
+    password: 'bhavin12345',
+    age: 18
+}
+
 // Wipe DB before Each Test
 beforeEach(async () => {
     await Users.deleteMany();
+    await new Users(userOne).save(); // For Testing LOGIN, we add one user after wiping the DB.
 });
 
 test('Signup a New User', async () => {
