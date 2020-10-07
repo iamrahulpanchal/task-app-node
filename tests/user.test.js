@@ -1,13 +1,20 @@
 const request = require('supertest');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const app = require('../src/app');
 const Users = require('../src/models/usersModel');
 
+const userOneId = new mongoose.Types.ObjectId();
 // For Testing LOGIN Route, We need one record
 const userOne = {
+    _id: userOneId,
     name: 'Bhavin Panchal',
     email: 'bhavin@gmail.com',
     password: 'bhavin12345',
-    age: 18
+    age: 18,
+    tokens: [{
+        token: jwt.sign({ _id: userOneId }, process.env.JWT_SECRET)
+    }]
 }
 
 // Wipe DB before Each Test
@@ -38,3 +45,11 @@ test('Not Login Non Existing User', async () => {
         password: 'dasarsdgsd'
     }).expect(400);
 })
+
+test('Fetching User Profile', async () => {
+    await request(app)
+        .get('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send()
+        .expect(200)
+});
