@@ -46,10 +46,12 @@ test('Signup a New User', async () => {
 });
 
 test('Login Existing User', async () => {
-    await request(app).post('/users/login').send({
+    const response = await request(app).post('/users/login').send({
         email: userOne.email,
         password: userOne.password
     }).expect(200);
+    const user = await Users.findById(userOneId);
+    expect(response.body.token).toBe(user.tokens[1].token);
 })
 
 test('Not Login Non Existing User', async () => {
