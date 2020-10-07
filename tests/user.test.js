@@ -24,12 +24,15 @@ beforeEach(async () => {
 });
 
 test('Signup a New User', async () => {
-    await request(app).post('/users').send({
+    const response = await request(app).post('/users').send({
         name: 'Rahul Panchal',
         email: 'rahulnpanchal@gmail.com',
         password: 'rahul123',
         age: 24
     }).expect(201);
+
+    const user = await Users.findById(response.body.user._id);
+    expect(user).not.toBeNull();
 });
 
 test('Login Existing User', async () => {
