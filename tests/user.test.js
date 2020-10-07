@@ -60,3 +60,18 @@ test('Not Get Profile for Unauthenticated User', async () => {
         .send()
         .expect(401)
 });
+
+test('Delete User Profile', async () => {
+    await request(app)
+        .delete('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send()
+        .expect(200)
+});
+
+test('Dont Delete User Profile Unauthenticated', async () => {
+    await request(app)
+        .delete('/users/me')
+        .send()
+        .expect(401)
+});
