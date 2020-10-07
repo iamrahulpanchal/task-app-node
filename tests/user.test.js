@@ -1,27 +1,9 @@
 const request = require('supertest');
-const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
 const app = require('../src/app');
 const Users = require('../src/models/usersModel');
+const { userOneId, userOne, setupDatabase } = require('./fixtures/db');
 
-const userOneId = new mongoose.Types.ObjectId();
-// For Testing LOGIN Route, We need one record
-const userOne = {
-    _id: userOneId,
-    name: 'Bhavin Panchal',
-    email: 'bhavin@gmail.com',
-    password: 'bhavin12345',
-    age: 18,
-    tokens: [{
-        token: jwt.sign({ _id: userOneId }, process.env.JWT_SECRET)
-    }]
-}
-
-// Wipe DB before Each Test
-beforeEach(async () => {
-    await Users.deleteMany();
-    await new Users(userOne).save(); // For Testing LOGIN, we add one user after wiping the DB.
-});
+beforeEach(setupDatabase)
 
 test('Signup a New User', async () => {
     const response = await request(app).post('/users').send({
