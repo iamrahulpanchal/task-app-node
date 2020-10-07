@@ -13,6 +13,16 @@ const sendWelcomeMail = (email, name) => {
     });
 };
 
+const sendCancelMail = (email, name) => {
+    sgMail.send({
+        to: email,
+        from: 'rahulnpanchal50@gmail.com',
+        subject: 'Sorry to See You Go!',
+        text: `Goodbye, ${name}. I hope to see you back sometime soon`,
+    });
+};
+
 module.exports = {
     sendWelcomeMail: sendWelcomeMail,
+    sendCancelMail: sendCancelMail,
 }
