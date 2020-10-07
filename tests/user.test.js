@@ -33,6 +33,16 @@ test('Signup a New User', async () => {
 
     const user = await Users.findById(response.body.user._id);
     expect(user).not.toBeNull();
+
+    expect(response.body).toMatchObject({
+        user: {
+            name: 'Rahul Panchal',
+            email: 'rahulnpanchal@gmail.com'
+        },
+        token: user.tokens[0].token
+    })
+
+    expect(user.password).not.toBe('rahul123')
 });
 
 test('Login Existing User', async () => {
