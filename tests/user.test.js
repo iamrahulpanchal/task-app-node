@@ -19,7 +19,7 @@ beforeEach(async () => {
 test('Signup a New User', async () => {
     await request(app).post('/users').send({
         name: 'Rahul Panchal',
-        email: 'rahulnpanchal50@gmail.com',
+        email: 'rahulnpanchal@gmail.com',
         password: 'rahul123',
         age: 24
     }).expect(201);
@@ -30,4 +30,11 @@ test('Login Existing User', async () => {
         email: userOne.email,
         password: userOne.password
     }).expect(200);
+})
+
+test('Not Login Non Existing User', async () => {
+    await request(app).post('/users/login').send({
+        email: userOne.email,
+        password: 'dasarsdgsd'
+    }).expect(400);
 })
