@@ -82,6 +82,9 @@ test('Delete User Profile', async () => {
         .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
         .send()
         .expect(200)
+    
+    const user = await Users.findById(userOneId);
+    expect(user).toBeNull();
 });
 
 test('Dont Delete User Profile Unauthenticated', async () => {
