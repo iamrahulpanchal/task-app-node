@@ -24,3 +24,10 @@ test('Signup a New User', async () => {
         age: 24
     }).expect(201);
 });
+
+test('Login Existing User', async () => {
+    await request(app).post('/users/login').send({
+        email: userOne.email,
+        password: userOne.password
+    }).expect(200);
+})
