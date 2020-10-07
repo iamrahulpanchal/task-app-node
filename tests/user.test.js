@@ -53,3 +53,10 @@ test('Fetching User Profile', async () => {
         .send()
         .expect(200)
 });
+
+test('Not Get Profile for Unauthenticated User', async () => {
+    await request(app)
+        .get('/users/me')
+        .send()
+        .expect(401)
+});
